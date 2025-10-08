@@ -8,7 +8,7 @@ interface VideoCallProps {
   userId: string | number;
 }
 
-export default function VideoCall({ callId, userId }: VideoCallProps) {
+const VideoCall: React.FC<VideoCallProps> = ({ callId, userId }) => {
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const pcRef = useRef<RTCPeerConnection | null>(null);
@@ -31,21 +31,14 @@ export default function VideoCall({ callId, userId }: VideoCallProps) {
       .getUserMedia({ video: true, audio: true })
       .then((stream) => {
         localStreamRef.current = stream;
-
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream;
-        }
-
+        if (localVideoRef.current) localVideoRef.current.srcObject = stream;
         stream.getTracks().forEach((track) => pc.addTrack(track, stream));
       })
-      .catch((_err) => {
-        // خطا را در صورت نیاز هندل کن
-      });
+      .catch((_err) => {});
 
     pc.ontrack = (event) => {
-      if (remoteVideoRef.current) {
+      if (remoteVideoRef.current)
         remoteVideoRef.current.srcObject = event.streams[0];
-      }
     };
 
     pc.onicecandidate = (event) => {
@@ -60,10 +53,8 @@ export default function VideoCall({ callId, userId }: VideoCallProps) {
 
     socket.on("webrtcOffer", async ({ offer, _senderId }) => {
       await pc.setRemoteDescription(new RTCSessionDescription(offer));
-
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
-
       socket.emit("webrtcAnswer", { callId, answer, senderId: userId });
     });
 
@@ -74,14 +65,11 @@ export default function VideoCall({ callId, userId }: VideoCallProps) {
     socket.on("webrtcIceCandidate", async ({ candidate }) => {
       try {
         await pc.addIceCandidate(candidate);
-      } catch {
-        // ignore errors safely
-      }
+      } catch {}
     });
 
     return () => {
       endCall();
-
       socket.off("webrtcOffer");
       socket.off("webrtcAnswer");
       socket.off("webrtcIceCandidate");
@@ -92,12 +80,9 @@ export default function VideoCall({ callId, userId }: VideoCallProps) {
   const startCall = async () => {
     const pc = pcRef.current;
     const socket = socketRef.current;
-
     if (!pc || !socket) return;
-
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
-
     socket.emit("webrtcOffer", { callId, offer, senderId: userId });
   };
 
@@ -118,11 +103,8 @@ export default function VideoCall({ callId, userId }: VideoCallProps) {
       pc.getSenders().forEach((sender) => {
         try {
           pc.removeTrack(sender);
-        } catch {
-          // ignore
-        }
+        } catch {}
       });
-
       pc.close();
       pcRef.current = null;
     }
@@ -135,32 +117,33 @@ export default function VideoCall({ callId, userId }: VideoCallProps) {
   return (
     <div className="flex h-[calc(100vh-65px)] flex-col gap-4">
       <div className="flex gap-4">
-        <video autoPlay className="h-full w-1/2" muted ref={localVideoRef}>
+        <video autoPlay muted ref={localVideoRef} className="h-full w-1/2">
           <track kind="captions" />
         </video>
-
-        <video autoPlay className="h-full w-1/2" ref={remoteVideoRef}>
+        <video autoPlay ref={remoteVideoRef} className="h-full w-1/2">
           <track kind="captions" />
         </video>
       </div>
 
       <div className="flex gap-2">
         <button
-          className="rounded bg-green-600 px-3 py-1 text-white"
-          onClick={startCall}
           type="button"
+          onClick={startCall}
+          className="rounded bg-green-600 px-3 py-1 text-white"
         >
           Start Call
         </button>
 
         <button
-          className="rounded bg-red-600 px-3 py-1 text-white"
-          onClick={endCall}
           type="button"
+          onClick={endCall}
+          className="rounded bg-red-600 px-3 py-1 text-white"
         >
           End Call
         </button>
       </div>
     </div>
   );
-}
+};
+
+export default VideoCall;
