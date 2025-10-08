@@ -165,9 +165,6 @@ export default function PrivateChat({ userId, chatId }: Props) {
             className="bg-transparent p-2"
             size="md"
             radius="full"
-            onPress={() => {
-              router.push(`/chats/private/${chatId}/videoCall`);
-            }}
           >
             <PhoneIcon />
           </Button>
