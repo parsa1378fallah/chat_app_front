@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@import "filepond/dist/filepond.min.css";
+
+* {
+  direction: rtl;
+}
+@font-face {
+  font-family: "Vazir";
+  src: url("/fonts/Vazir.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "Vazir", sans-serif;
+}
+@config "../tailwind.config.js";
