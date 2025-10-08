@@ -1,11 +1,12 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Avatar } from "@heroui/avatar";
 import { Badge } from "@heroui/badge";
 import { ScrollShadow } from "@heroui/scroll-shadow";
-import { getChats } from "@/services/user.service";
 import { usePathname, useRouter } from "next/navigation";
+
+import { getChats } from "@/services/user.service";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectJoinedChats, setChats } from "@/store/features/joinedChatsSlice";
 
@@ -32,6 +33,7 @@ const ChatsSidebar = () => {
     const fetchChats = async () => {
       try {
         const res = await getChats();
+
         if (res?.data) {
           const formattedChats = res.data.map((chat: Chat) => ({
             ...chat,
@@ -45,10 +47,10 @@ const ChatsSidebar = () => {
               : "",
           }));
 
-          dispatch(setChats(formattedChats)); // ذخیره در redux
+          dispatch(setChats(formattedChats));
         }
-      } catch (error) {
-        console.error("Failed to fetch chats:", error);
+      } catch (_error) {
+        // handle error if you want (toast, logger, etc.)
       } finally {
         setLoading(false);
       }
@@ -61,7 +63,7 @@ const ChatsSidebar = () => {
     pathname === `/chats/${chat.chatType}/${chat.id}`;
 
   return (
-    <aside className="fixed top-16 right-0 w-80  h-[calc(100vh-60px)]  border-r bg-white dark:bg-gray-900 z-50">
+    <aside className="fixed top-16 right-0 w-80 h-[calc(100vh-60px)] border-r bg-white dark:bg-gray-900 z-50">
       <div className="p-4 border-b dark:border-gray-700">
         <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">
           Chats
@@ -77,25 +79,27 @@ const ChatsSidebar = () => {
 
         {!loading &&
           chats.map((chat) => (
-            <div
+            <button
               key={`${chat.chatType}_${chat.id}`}
-              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${
+              aria-current={isActive(chat) ? "page" : undefined}
+              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 w-full text-left ${
                 isActive(chat) ? "bg-blue-100 dark:bg-blue-900" : ""
               }`}
               onClick={() => router.push(`/chats/${chat.chatType}/${chat.id}`)}
+              type="button"
             >
               <Badge
-                isInvisible={chat.unread === 0}
-                content={chat.unread}
-                shape="circle"
                 color="danger"
+                content={chat.unread}
+                isInvisible={chat.unread === 0}
+                shape="circle"
               >
                 <Avatar
-                  src={chat.avatar}
-                  size="md"
                   isBordered
-                  radius="full"
                   className="shrink-0"
+                  radius="full"
+                  size="md"
+                  src={chat.avatar}
                 />
               </Badge>
 
@@ -109,7 +113,7 @@ const ChatsSidebar = () => {
               </div>
 
               <span className="text-xs text-gray-400">{chat.time}</span>
-            </div>
+            </button>
           ))}
 
         {!loading && chats.length === 0 && (
