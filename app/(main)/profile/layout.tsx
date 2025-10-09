@@ -11,7 +11,7 @@ export default function RootLayout({
     <AuthProtected>
       <div className="relative flex flex-col ">
         <ProfileSidebar />
-        <main className="flex-1 mr-98  border border-1 overflow-auto">
+        <main className="flex-1 mr-98   border-1 overflow-auto">
           {children}
         </main>
       </div>

@@ -1,5 +1,5 @@
 import { privteChatApi } from "@/lib/apiInstances";
-import { Message } from "@/types";
+import { Message, otherUserInfo, initPrivateChatTypes } from "@/types";
 
 
 export async function getPrivateMessages(chatId: number): Promise<Message[]> {
@@ -18,9 +18,12 @@ export async function sendPrivateMessage(
         chatType: "private",
     });
 }
-export async function initPrivateChat(receiverId: number) {
-    return await privteChatApi.post<>("/init", { receiverId })
+export async function initPrivateChat(receiverId: number): Promise<initPrivateChatTypes> {
+    return await privteChatApi.post<initPrivateChatTypes>("/init", { receiverId })
 }
-export async function getOtherUserInfo(chatId: number) {
-    return await privteChatApi.get<>(`/${chatId}/friend`)
+export async function getOtherUserInfo(
+    chatId: number
+): Promise<otherUserInfo> {
+    const res = await privteChatApi.get<otherUserInfo>(`/${chatId}/friend`);
+    return res;
 }

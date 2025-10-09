@@ -1,5 +1,5 @@
 import { groupChatApi } from "@/lib/apiInstances";
-import { Message } from "@/types";
+import { Message, groupChatTypes } from "@/types";
 
 
 export async function getGroupMessages(chatId: number): Promise<Message[]> {
@@ -18,8 +18,8 @@ export async function sendGroupMessage(
         chatType: "group",
     });
 }
-export async function initGroupChat(groupName: string, description: string) {
-    return await groupChatApi.post<>("/init", { groupName, description })
+export async function initGroupChat(groupName: string, description: string): Promise<groupChatTypes> {
+    return await groupChatApi.post<groupChatTypes>("/init", { groupName, description })
 }
 
 export async function joinGroupChat(groupId: number) {

@@ -72,9 +72,9 @@ export class HttpClient {
         );
     }
 
-    private async handle<T>(promise: Promise<AxiosResponse<T>>): Promise<T> {
+    private async handle<T>(promise: Promise<AxiosResponse<{ data: T }>>): Promise<T> {
         const res = await promise;
-        return res.data;
+        return res.data.data;
     }
 
     get<T>(url: string, params?: object) {

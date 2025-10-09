@@ -74,10 +74,8 @@ export default function ExampleFilePond() {
               try {
                 const res = JSON.parse(response);
                 if (res?.data?.profileImage) {
-                  dispatch(
-                    updateProfile({ profileImage: res.data.profileImage })
-                  );
-                  console.log("✅ Profile updated:", res.data.profileImage);
+                  dispatch(updateProfile({ profileImage: res.profileImage }));
+                  console.log("✅ Profile updated:", res.profileImage);
                 }
                 return res;
               } catch (err) {

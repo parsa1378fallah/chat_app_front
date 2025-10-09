@@ -8,10 +8,15 @@ import {
 } from "@/services/channelChat.service";
 
 interface Message {
-  id: number;
-  sender: string;
-  text: string;
-  createdAt: string;
+  id: number; // شناسه پیام
+  senderId: number; // آیدی فرستنده
+  chatType: string; // نوع چت (private, group, channel و غیره)
+  chatId: number; // آیدی چت مربوطه
+  content: string; // محتوای پیام
+  messageType: string; // نوع پیام (text, image و غیره)
+  createdAt: string; // تاریخ ایجاد پیام (timestamp)
+  updatedAt: string; // تاریخ آخرین بروزرسانی
+  senderProfileImage: string;
 }
 
 export default function ChannelPreviewPage() {
@@ -27,7 +32,7 @@ export default function ChannelPreviewPage() {
     const fetchMessages = async () => {
       try {
         const res = await getChannelMessages(channelId);
-        setMessages(res.data.channelMessages);
+        setMessages(res);
       } catch {
         setError("خطا در دریافت پیام‌ها");
       }
@@ -53,8 +58,8 @@ export default function ChannelPreviewPage() {
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
         {messages.map((msg) => (
           <div key={msg.id} className="border-b pb-2">
-            <p className="font-bold">{msg.sender}</p>
-            <p>{msg.text}</p>
+            <p className="font-bold">{msg.senderId}</p>
+            <p>{msg.content}</p>
             <span className="text-xs text-gray-500">{msg.createdAt}</span>
           </div>
         ))}

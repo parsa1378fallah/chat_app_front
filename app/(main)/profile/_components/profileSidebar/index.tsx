@@ -50,7 +50,7 @@ const ProfileSidebar = () => {
         </h2>
         <Badge
           content={profile.status === "آنلاین" ? "●" : ""}
-          color={profile.status === "آنلاین" ? "success" : "gray"}
+          color={"success"}
           className="mt-2 text-xs"
         >
           <span className="text-gray-500 dark:text-gray-400">

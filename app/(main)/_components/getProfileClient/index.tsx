@@ -26,7 +26,17 @@ export default function GetProfileClient() {
 
         const profile = await getProfile();
         router.push("/chats");
-        dispatch(login(profile.data));
+        dispatch(
+          login({
+            id: profile.id ?? null,
+            username: profile.username ?? null,
+            email: profile.email ?? null,
+            phone: profile.phone ?? null,
+            bio: profile.bio ?? null,
+            profileImage: profile.profileImage ?? null,
+            isLoggedIn: true,
+          })
+        );
       } catch (err) {
         dispatch(logout());
         console.error("Error fetching profile:", err);

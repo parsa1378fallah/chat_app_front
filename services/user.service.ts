@@ -20,6 +20,6 @@ export async function deleteProfile(): Promise<{ message: string }> {
     return await userApi.delete<{ message: string }>("/me");
 }
 
-export async function getChats(): Promise<ChatResponse> {
-    return await userApi.get<ChatResponse>("/me/chats");
+export async function getChats(): Promise<ChatResponse[]> {
+    return await userApi.get<ChatResponse[]>("/me/chats");
 }

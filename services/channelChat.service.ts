@@ -1,5 +1,5 @@
 import { channelChatApi } from "@/lib/apiInstances";
-import { Message } from "@/types";
+import { Message, ChannelChatTypes } from "@/types";
 
 
 export async function getChannelMessages(chatId: number): Promise<Message[]> {
@@ -18,14 +18,14 @@ export async function sendChannelMessage(
         chatType: "channel",
     });
 }
-export async function initChannelChat(channelName: string, description: string) {
-    return await channelChatApi.post<>("/init", { channelName, description })
+export async function initChannelChat(channelName: string, description: string): Promise<ChannelChatTypes> {
+    return await channelChatApi.post<ChannelChatTypes>("/init", { channelName, description })
 }
 
 export async function joinChannelChat(channelId: number) {
     return await channelChatApi.post<>("/join", { channelId })
 }
 
-export async function isChannelOwner(channelId: number) {
-    return await channelChatApi.post<>("/isOwner", { channelId })
+export async function isChannelOwner(channelId: number): Promise<boolean> {
+    return await channelChatApi.post<boolean>("/isOwner", { channelId })
 }

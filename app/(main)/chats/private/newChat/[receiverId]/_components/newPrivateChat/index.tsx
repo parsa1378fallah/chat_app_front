@@ -16,7 +16,7 @@ const NewPrivateChat = ({ receiverId }: { receiverId: number }) => {
         if (receiverId) {
           const chat = await initPrivateChat(receiverId);
           console.log("Chat initialized:", chat);
-          router.replace(`/chats/private/${chat.data.id}`);
+          router.replace(`/chats/private/${chat.id}`);
         }
       } catch (err) {
         console.error("Error initializing private chat:", err);

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Message } from "@/types";
+import { Message, otherUserInfo } from "@/types";
 import { Avatar } from "@heroui/avatar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/features/userSlice";
@@ -8,7 +8,7 @@ import { selectUser } from "@/store/features/userSlice";
 interface MessageListProps {
   messages: Message[];
   userId: number | string;
-  otherUser: any;
+  otherUser: otherUserInfo;
 }
 
 const formatDate = (dateString: string) => {
@@ -27,7 +27,7 @@ const MessageList: React.FC<MessageListProps> = ({
   return (
     <div className="flex flex-col">
       {messages.map((msg) => {
-        const isOwn = msg.senderId === userId;
+        const isOwn = msg.senderId === Number(userStore.id);
 
         return (
           <div
@@ -36,11 +36,12 @@ const MessageList: React.FC<MessageListProps> = ({
             }`}
             key={msg.id}
           >
+            {`${msg.id}  ${userStore.id}`}
             <div className="flex items-end mb-2">
               <Avatar
                 isBordered
                 src={
-                  Number(userStore.id) === msg.senderId
+                  Number(userStore.id) === Number(msg.senderId)
                     ? `https://localhost:5000${userStore.profileImage}`
                     : `https://localhost:5000${otherUser.profileImage}`
                 }

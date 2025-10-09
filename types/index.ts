@@ -17,12 +17,12 @@ export interface LoginResponse {
   };
 }
 
-// داده‌های ثبت‌نام
 export interface RegisterData {
   username: string;
   email: string;
   password: string;
-  phone: string
+  phone: string;
+  confirmPassword?: string; // optional
 }
 
 // پروفایل کاربر
@@ -43,21 +43,47 @@ export interface Message {
   senderProfileImage: string;
 }
 export interface ChatResponse {
-  chat_id: number;
-  chat_type: "private" | "group" | "channel";
-  name: string;                // نام چت یا نام گروه/کانال
-  created_at: string;
-  last_message_id: number | null;
-  last_message_content: string | null;
-  last_message_time: string | null;
+  id: number;
+  chatType: "private" | "group" | "channel";
+  name: string;
+  createdAt: string;
+  lastMessageId: number | null;
+  lastMessage: string | null;
+  lastMessageAt: string | null;
 }
 export interface SearchChatItem {
-  type: "user" | "group" | "channel";
-  name: string;
-  isMember: boolean;          // مشخص می‌کنه کاربر عضو است یا چت خصوصی وجود دارد
-  chatId?: number | null;     // فقط برای کاربران (چت خصوصی)
-  userId?: number;            // فقط برای کاربران
-  groupId?: number;           // فقط برای گروه‌ها
-  channelId?: number;
-  chatType: "private" | "channel" | "group"     // فقط برای کانال‌ها
+  chatType: "private" | "group" | "channel";
+  id: number;                // شناسه کاربر، گروه یا کانال
+  name: string;              // نام کاربر، گروه یا کانال
+  chatId: number | null;     // شناسه چت (private chat ممکن است null باشد)
+  isMember: boolean;       // فقط برای کانال‌ها
+}
+export interface otherUserInfo {
+  id: number;                  // شناسه کاربر
+  username: string;            // نام کاربری
+  profileImage: string | null; // عکس پروفایل (ممکن است نداشته باشد)
+  displayName: string | null;  // نام نمایشی (ممکن است نداشته باشد)
+}
+export interface initPrivateChatTypes {
+  id: number;             // bigint unsigned -> number
+  user1_id: number;       // bigint unsigned -> number
+  user2_id: number;       // bigint unsigned -> number
+  created_at: string | null; // timestamp -> string
+  updated_at: string | null; // timestamp -> string
+}
+export interface ChannelChatTypes {
+  id: number;              // bigint unsigned -> number
+  name: string;            // varchar(100) -> string
+  description: string | null; // text -> string | null
+  created_by: number;      // bigint unsigned -> number
+  created_at: string | null;  // timestamp -> string | null
+  updated_at: string | null;  // timestamp -> string | null
+}
+
+export interface groupChatTypes {
+  id: number;              // bigint unsigned -> number
+  name: string;            // varchar(100) -> string
+  description: string | null; // text -> string | null
+  created_by: number;      // bigint unsigned -> number
+  created_at: string | null;  // timestamp -> string | null
 }

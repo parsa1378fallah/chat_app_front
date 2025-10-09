@@ -40,8 +40,8 @@ const CreateGroupModal = () => {
       setDescription("");
       console.log(newGroup);
       // رفتن به صفحه گروه جدید
-      if (newGroup?.data.id) {
-        router.push(`/chats/group/${newGroup?.data.id}`);
+      if (newGroup?.id) {
+        router.push(`/chats/group/${newGroup?.id}`);
       }
     } catch (error) {
       console.error("خطا در ایجاد گروه:", error);

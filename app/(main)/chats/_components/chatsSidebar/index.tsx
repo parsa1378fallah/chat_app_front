@@ -33,9 +33,9 @@ const ChatsSidebar = () => {
     const fetchChats = async () => {
       try {
         const res = await getChats();
-
-        if (res?.data) {
-          const formattedChats = res.data.map((chat: Chat) => ({
+        console.log("fuuuuuu", res);
+        if (res.length > 0) {
+          const formattedChats = res.map((chat: Chat) => ({
             ...chat,
             unread: 0,
             avatar: chat.avatar || "/default-avatar.png",
@@ -82,7 +82,7 @@ const ChatsSidebar = () => {
             <button
               key={`${chat.chatType}_${chat.id}`}
               aria-current={isActive(chat) ? "page" : undefined}
-              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 w-full text-left ${
+              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 w-full text-right ${
                 isActive(chat) ? "bg-blue-100 dark:bg-blue-900" : ""
               }`}
               onClick={() => router.push(`/chats/${chat.chatType}/${chat.id}`)}

@@ -41,7 +41,14 @@ export default function UserRegisterForm() {
 
   const onSubmit = async (data: UserFormData) => {
     try {
-      const response = registerService({ ...data });
+      const payload = {
+        username: data.username,
+        email: data.email,
+        phone: data.phone,
+        password: data.password,
+      };
+
+      await registerService(payload);
       addToast({
         description: "کاربر با موفقیت ثبت نام شد",
         color: "success",

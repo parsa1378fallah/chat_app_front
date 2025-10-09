@@ -15,17 +15,19 @@ interface Props {
 }
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectUser } from "@/store/features/userSlice";
 import { updateChat } from "@/store/features/joinedChatsSlice";
 import MessageList from "@/app/(main)/chats/_components/messageList";
 export default function ChannelChat({ userId, channelId }: Props) {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isOwner, setIsOwner] = useState(false);
 
+  const userStore = useAppSelector(selectUser);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -52,9 +54,9 @@ export default function ChannelChat({ userId, channelId }: Props) {
     });
     const isThisUserOwner = async () => {
       try {
-        const res = await isChannelOwner(channelId);
-        console.log(res);
-        res.data.isOwner ? setIsOwner(true) : setIsOwner(false);
+        const isUserOwner = await isChannelOwner(channelId);
+        console.log(isUserOwner);
+        isUserOwner ? setIsOwner(true) : setIsOwner(false);
       } catch (e) {
         console.log(e);
       }
@@ -63,7 +65,7 @@ export default function ChannelChat({ userId, channelId }: Props) {
     const fetchHistory = async () => {
       try {
         const res = await getChannelMessages(channelId);
-        setMessages(res.data.channelMessages);
+        setMessages(res);
         console.log("xxx");
       } catch (err) {
         console.error("❌ Error fetching messages:", err);
@@ -86,12 +88,13 @@ export default function ChannelChat({ userId, channelId }: Props) {
       const newMessage: Message = {
         id: Date.now(),
         senderId: userId,
-        chat_type: "channel",
-        chat_id: channelId,
+        chatType: "channel",
+        chatId: channelId,
         content: input,
-        message_type: "text",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        messageType: "text",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        senderProfileImage: userStore?.profileImage || "/next.svg",
       };
 
       try {

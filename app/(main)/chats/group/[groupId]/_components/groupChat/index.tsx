@@ -9,8 +9,9 @@ import {
 import { Message } from "@/types";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { updateChat, incrementUnread } from "@/store/features/joinedChatsSlice";
+import { selectUser } from "@/store/features/userSlice";
 import { ScrollShadow } from "@heroui/react";
 import MessageList from "@/app/(main)/chats/_components/messageList";
 interface Props {
@@ -23,7 +24,8 @@ export default function GroupChat({ userId, groupId }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const dispatch = useDispatch();
+  const userStore = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
 
   // اتصال به سوکت و دریافت پیام‌ها
   useEffect(() => {
@@ -39,10 +41,10 @@ export default function GroupChat({ userId, groupId }: Props) {
       console.log(msg);
       dispatch(
         updateChat({
-          id: msg.chat_id,
+          id: msg.chatId,
           chatType: "group",
           lastMessage: msg.content,
-          lastMessageAt: msg.created_at,
+          lastMessageAt: msg.createdAt,
         })
       );
     });
@@ -51,7 +53,7 @@ export default function GroupChat({ userId, groupId }: Props) {
     const fetchHistory = async () => {
       try {
         const res = await getGroupMessages(groupId);
-        setMessages(res.data.groupMessages);
+        setMessages(res);
       } catch (err) {
         console.error("❌ خطا در دریافت پیام‌ها:", err);
       }
@@ -75,12 +77,13 @@ export default function GroupChat({ userId, groupId }: Props) {
       const newMessage: Message = {
         id: Date.now(),
         senderId: userId,
-        chat_type: "group",
-        chat_id: groupId,
+        chatType: "group",
+        chatId: groupId,
         content: input,
-        message_type: "text",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        messageType: "text",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        senderProfileImage: userStore.profileImage || "/public/next.svg",
       };
 
       try {
@@ -95,7 +98,7 @@ export default function GroupChat({ userId, groupId }: Props) {
             id: groupId,
             chatType: "group",
             lastMessage: input,
-            lastMessageAt: newMessage.created_at,
+            lastMessageAt: newMessage.createdAt,
           })
         );
 

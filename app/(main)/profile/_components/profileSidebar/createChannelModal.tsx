@@ -40,8 +40,8 @@ const CreateChannelModal = () => {
       setDescription("");
 
       // رفتن به صفحه کانال جدید
-      if (newChannel?.data.id) {
-        router.push(`/chats/channel/${newChannel.data.id}`);
+      if (newChannel?.id) {
+        router.push(`/chats/channel/${newChannel.id}`);
       }
     } catch (error) {
       console.error("خطا در ایجاد کانال:", error);

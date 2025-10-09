@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { searchChats } from "@/services/search.service";
 import { SearchChatItem } from "@/types";
+
 import Link from "next/link";
 export default function ChatSearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchChatItem[]>([]);
   const [loading, setLoading] = useState(false);
-  const handleRoute = (item) => {
+  const handleRoute = (item: SearchChatItem) => {
     if (item.isMember) return `/chats/${item.chatType}/${item.chatId}`;
     else {
       if (item.chatType === "private")
@@ -31,7 +32,7 @@ export default function ChatSearchBar() {
       try {
         const res = await searchChats(query);
         console.log(res); // استفاده از سرویس
-        setResults(res.data);
+        setResults(res);
       } catch (err) {
         console.error(err);
       } finally {
@@ -63,9 +64,9 @@ export default function ChatSearchBar() {
               <div className="p-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center border-b last:border-b-0">
                 <span>{item.name}</span>
                 <span className="text-sm text-gray-400">
-                  {item.type === "user"
+                  {item.chatType === "private"
                     ? "کاربر"
-                    : item.type === "group"
+                    : item.chatType === "group"
                       ? "گروه"
                       : "کانال"}
                   {item.isMember ? " ✅" : ""}

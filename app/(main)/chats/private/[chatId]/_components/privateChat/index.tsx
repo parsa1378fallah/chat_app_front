@@ -22,16 +22,24 @@ import {
 } from "@heroicons/react/24/outline";
 import { Avatar } from "@heroui/avatar";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { selectUser } from "@/store/features/userSlice";
 interface Props {
   userId: number;
   chatId: number;
 }
-
+export interface otherUserInfo {
+  id: number;
+  username: string;
+  profileImage: string | null;
+  displayName: string | null;
+}
 export default function PrivateChat({ userId, chatId }: Props) {
   const router = useRouter();
   const [socket, setSocket] = useState<Socket | null>(null);
+  const userStore = useAppSelector(selectUser);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [otherUser, setOtherUser] = useState<Message[]>([]);
+  const [otherUser, setOtherUser] = useState<otherUserInfo | null>(null);
 
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -54,10 +62,10 @@ export default function PrivateChat({ userId, chatId }: Props) {
 
       dispatch(
         updateChat({
-          id: msg.chat_id,
+          id: msg.chatId,
           chatType: "private",
           lastMessage: msg.content,
-          lastMessageAt: msg.created_at,
+          lastMessageAt: msg.createdAt,
         })
       );
     });
@@ -66,7 +74,7 @@ export default function PrivateChat({ userId, chatId }: Props) {
     const fetchHistory = async () => {
       try {
         const res = await getPrivateMessages(chatId);
-        setMessages(res.data.chatMessages);
+        setMessages(res);
       } catch (err) {
         console.error("❌ خطا در دریافت پیام‌ها:", err);
       }
@@ -74,7 +82,8 @@ export default function PrivateChat({ userId, chatId }: Props) {
     const getOtherUserInformation = async () => {
       try {
         const res = await getOtherUserInfo(chatId);
-        setOtherUser(res.data);
+        console.log("friend info", res);
+        setOtherUser(res);
       } catch {}
     };
 
@@ -98,9 +107,10 @@ export default function PrivateChat({ userId, chatId }: Props) {
         id: Date.now(),
         senderId: userId,
         chatType: "private",
-        chat_id: chatId,
+        chatId: chatId,
         content: input,
         messageType: "text",
+        senderProfileImage: userStore?.profileImage || "/next.svg",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -119,7 +129,7 @@ export default function PrivateChat({ userId, chatId }: Props) {
             id: chatId,
             chatType: "private",
             lastMessage: input,
-            lastMessageAt: newMessage.created_at,
+            lastMessageAt: newMessage.createdAt,
           })
         );
 
@@ -138,7 +148,7 @@ export default function PrivateChat({ userId, chatId }: Props) {
             {" "}
             <Avatar
               isBordered
-              src={`https://localhost:5000${otherUser.profileImage}`}
+              src={`https://localhost:5000${otherUser?.profileImage ?? "/next.svg"}`}
               size="sm"
               className="cursor-pointer"
               onClick={() => {}}
@@ -146,7 +156,7 @@ export default function PrivateChat({ userId, chatId }: Props) {
           </div>
           <div className="flex flex-col">
             <span className="text-xl">
-              {otherUser.displayName ? otherUser.displayName : "کاربر"}
+              {otherUser?.displayName ? otherUser.displayName : "کاربر"}
             </span>
             <span className="text-xs">اخیرا مشاهده شده</span>
           </div>
@@ -181,11 +191,13 @@ export default function PrivateChat({ userId, chatId }: Props) {
 
       <ScrollShadow hideScrollBar>
         <div className="px-4">
-          <MessageList
-            messages={messages}
-            userId={userId}
-            otherUser={otherUser}
-          />
+          {otherUser && (
+            <MessageList
+              messages={messages}
+              userId={userId}
+              otherUser={otherUser} // حالا حتماً otherUserInfo است
+            />
+          )}
           <div ref={messagesEndRef} />
         </div>
       </ScrollShadow>
