@@ -22,8 +22,8 @@ export async function initChannelChat(channelName: string, description: string):
     return await channelChatApi.post<ChannelChatTypes>("/init", { channelName, description })
 }
 
-export async function joinChannelChat(channelId: number) {
-    return await channelChatApi.post<>("/join", { channelId })
+export async function joinChannelChat(channelId: number): Promise<boolean> {
+    return await channelChatApi.post<boolean>("/join", { channelId })
 }
 
 export async function isChannelOwner(channelId: number): Promise<boolean> {

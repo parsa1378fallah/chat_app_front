@@ -22,6 +22,6 @@ export async function initGroupChat(groupName: string, description: string): Pro
     return await groupChatApi.post<groupChatTypes>("/init", { groupName, description })
 }
 
-export async function joinGroupChat(groupId: number) {
-    return await groupChatApi.post<>("/join", { groupId })
+export async function joinGroupChat(groupId: number): Promise<boolean> {
+    return await groupChatApi.post<boolean>("/join", { groupId })
 }
