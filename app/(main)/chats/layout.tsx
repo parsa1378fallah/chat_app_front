@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 
-import ChatsSidebar from "./_components/chatsSidebar";
 import AuthProtected from "@/app/_components/protectedRoutes/authProtected";
+import ResponsiveLayout from "./_components/responsiveLayout/idex.";
 export default function RootLayout({
   children,
 }: {
@@ -9,16 +9,7 @@ export default function RootLayout({
 }) {
   return (
     <AuthProtected>
-      {" "}
-      <div className="relative flex flex-col">
-        <ChatsSidebar />
-        <main
-          className="mr-80   overflow-auto  "
-          style={{ backgroundImage: "url('/chatbg.jpg')" }}
-        >
-          {children}
-        </main>
-      </div>
+      <ResponsiveLayout>{children}</ResponsiveLayout>
     </AuthProtected>
   );
 }

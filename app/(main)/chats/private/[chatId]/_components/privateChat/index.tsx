@@ -19,11 +19,13 @@ import {
   MagnifyingGlassIcon,
   EllipsisVerticalIcon,
   PhoneIcon,
+  ArrowRightCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Avatar } from "@heroui/avatar";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/features/userSlice";
+import { setShowSidebar } from "@/store/features/uiSlice";
 interface Props {
   userId: number;
   chatId: number;
@@ -55,6 +57,7 @@ export default function PrivateChat({ userId, chatId }: Props) {
 
     // دریافت پیام از سوکت
     socketIo.on("receivePrivateMessage", (msg: Message) => {
+      console.log("hello");
       if (msg.senderId !== userId) setMessages((prev) => [...prev, msg]);
       console.log(msg);
       const audio = new Audio("/sounds/telegram-notification.mp3");
@@ -142,13 +145,27 @@ export default function PrivateChat({ userId, chatId }: Props) {
 
   return (
     <div className="h-[calc(100vh-65px)] flex flex-col justify-end relative pt-14">
-      <div className="w-full absolute top-0 right-0 flex items-center justify-between bg-slate-800 h-14 z-50 px-4 ">
+      <div className="w-full absolute top-0 right-0 flex items-center justify-between bg-slate-800 h-14 z-10 px-4 ">
         <div className="flex items-center gap-4">
-          <div>
-            {" "}
+          <div className="flex items-center gap-4">
+            <Button
+              isIconOnly
+              className="bg-transparent p-2 flex sm:hidden"
+              size="lg"
+              radius="full"
+              onPress={() => {
+                dispatch(setShowSidebar(true));
+              }}
+            >
+              <ArrowRightCircleIcon />
+            </Button>
             <Avatar
               isBordered
-              src={`https://localhost:5000${otherUser?.profileImage ?? "/next.svg"}`}
+              src={
+                otherUser?.profileImage
+                  ? `https://localhost:5000${otherUser.profileImage}`
+                  : "/public/user.png"
+              }
               size="sm"
               className="cursor-pointer"
               onClick={() => {}}
@@ -175,6 +192,9 @@ export default function PrivateChat({ userId, chatId }: Props) {
             className="bg-transparent p-2"
             size="md"
             radius="full"
+            onPress={() => {
+              router.push(`/chats/private/${chatId}/videoCall`);
+            }}
           >
             <PhoneIcon />
           </Button>

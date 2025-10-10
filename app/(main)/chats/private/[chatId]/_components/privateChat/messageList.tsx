@@ -36,7 +36,6 @@ const MessageList: React.FC<MessageListProps> = ({
             }`}
             key={msg.id}
           >
-            {`${msg.id}  ${userStore.id}`}
             <div className="flex items-end mb-2">
               <Avatar
                 isBordered

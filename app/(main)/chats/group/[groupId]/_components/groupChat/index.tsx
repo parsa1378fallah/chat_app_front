@@ -38,6 +38,9 @@ export default function GroupChat({ userId, groupId }: Props) {
     // دریافت پیام‌ها از سوکت
     socketIo.on("receiveGroupMessage", (msg: Message) => {
       if (msg.senderId !== userId) setMessages((prev) => [...prev, msg]);
+
+      const audio = new Audio("/sounds/telegram-notification.mp3");
+      audio.play();
       console.log(msg);
       dispatch(
         updateChat({

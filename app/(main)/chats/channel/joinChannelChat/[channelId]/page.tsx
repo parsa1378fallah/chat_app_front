@@ -6,7 +6,6 @@ import {
   joinChannelChat,
   getChannelMessages,
 } from "@/services/channelChat.service";
-
 interface Message {
   id: number; // شناسه پیام
   senderId: number; // آیدی فرستنده
@@ -53,7 +52,7 @@ export default function ChannelPreviewPage() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-[calc(100vh-65px)]">
       {/* پیام‌ها */}
       <div className="flex-1 overflow-y-auto p-4 space-y-2">
         {messages.map((msg) => (

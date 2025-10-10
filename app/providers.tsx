@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import type { ThemeProviderProps } from "next-themes";
+import { useEffect } from "react";
 
 // UI & Theme
 import { HeroUIProvider } from "@heroui/system";
@@ -28,6 +29,12 @@ declare module "@react-types/shared" {
 }
 
 export function Providers({ children, themeProps }: ProvidersProps) {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://meet.jit.si/external_api.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
   const router = useRouter();
 
   return (

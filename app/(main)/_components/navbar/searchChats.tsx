@@ -13,16 +13,16 @@ export default function ChatSearchBar() {
     if (item.isMember) return `/chats/${item.chatType}/${item.chatId}`;
     else {
       if (item.chatType === "private")
-        return `chats/private/newChat/${item.id}`;
+        return `/chats/private/newChat/${item.id}`;
       if (item.chatType === "group")
-        return `chats/group/joinGroupChat/${item.id}`;
+        return `/chats/group/joinGroupChat/${item.id}`;
       if (item.chatType === "channel")
-        return `chats/channel/joinChannelChat/${item.id}`;
+        return `/chats/channel/joinChannelChat/${item.id}`;
       return `/`;
     }
   };
   useEffect(() => {
-    if (query.length < 4) {
+    if (query.length < 2) {
       setResults([]);
       return;
     }
@@ -56,7 +56,7 @@ export default function ChatSearchBar() {
 
       {/* نتایج مستطیلی زیر نوبار */}
       {query.length >= 4 && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-80 overflow-y-auto">
+        <div className="absolute z-[500] top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg  max-h-80 overflow-y-auto">
           {loading && <div className="p-2 text-gray-500">Loading...</div>}
           {results.map((item) => (
             <Link key={`${item.id}_${item.chatType}`} href={handleRoute(item)}>

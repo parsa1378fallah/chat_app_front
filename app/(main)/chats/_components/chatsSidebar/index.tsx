@@ -9,6 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getChats } from "@/services/user.service";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectJoinedChats, setChats } from "@/store/features/joinedChatsSlice";
+import { setShowSidebar } from "@/store/features/uiSlice";
 
 interface Chat {
   id: number;
@@ -25,7 +26,6 @@ const ChatsSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
-
   const chats = useAppSelector(selectJoinedChats);
   const [loading, setLoading] = useState(true);
 
@@ -63,7 +63,7 @@ const ChatsSidebar = () => {
     pathname === `/chats/${chat.chatType}/${chat.id}`;
 
   return (
-    <aside className="fixed top-16 right-0 w-80 h-[calc(100vh-60px)] border-r bg-white dark:bg-gray-900 z-50">
+    <aside className="fixed top-16 right-0 w-full sm:w-80 h-[calc(100vh-60px)] border-r bg-white dark:bg-gray-900 z-50">
       <div className="p-4 border-b dark:border-gray-700">
         <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">
           Chats
@@ -85,7 +85,10 @@ const ChatsSidebar = () => {
               className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 w-full text-right ${
                 isActive(chat) ? "bg-blue-100 dark:bg-blue-900" : ""
               }`}
-              onClick={() => router.push(`/chats/${chat.chatType}/${chat.id}`)}
+              onClick={() => {
+                dispatch(setShowSidebar(false));
+                router.push(`/chats/${chat.chatType}/${chat.id}`);
+              }}
               type="button"
             >
               <Badge
