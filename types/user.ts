@@ -36,7 +36,7 @@ export interface UserProfile {
     displayName: string | null;
 }
 export interface UpdateProfileBody {
-    displayName: string;
+    displayName?: string;
     username?: string | null;
     phone?: string | null;
     bio?: string | null;

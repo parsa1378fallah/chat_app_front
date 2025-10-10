@@ -34,6 +34,7 @@ export default function GetProfileClient() {
             phone: profile.phone ?? null,
             bio: profile.bio ?? null,
             profileImage: profile.profileImage ?? null,
+            displayName: profile.displayName,
             isLoggedIn: true,
           })
         );
