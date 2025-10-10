@@ -10,19 +10,20 @@ import {
   useDisclosure,
   Input,
   addToast,
+  Textarea,
 } from "@heroui/react";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { useAppDispatch } from "@/store/hooks";
 import { editUserProfile } from "@/services/user.service";
 import { updateProfile } from "@/store/features/userSlice";
-export default function EditUsernameModal() {
+export default function EditUserBioModal() {
   const dispatch = useAppDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [username, setUsername] = useState<string>("");
+  const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-    if (!username.trim()) {
+    if (!bio.trim()) {
       addToast({
         title: "خطا",
         description: "نام کاربر نمی‌تواند خالی باشد ❌",
@@ -33,13 +34,13 @@ export default function EditUsernameModal() {
 
     try {
       setLoading(true);
-      const res = await editUserProfile({ username });
+      const res = await editUserProfile({ bio });
 
       if (res) {
-        dispatch(updateProfile(res));
+        dispatch(updateProfile({ bio }));
         addToast({
           title: "موفقیت ✅",
-          description: "نام کاربری  با موفقیت ویرایش شد",
+          description: "بیو کاربر با موفقیت به روز رسانی شد",
           color: "success",
         });
         onClose();
@@ -80,18 +81,16 @@ export default function EditUsernameModal() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 text-right">
-                تغییر نام کاربری
+                تغییر نام کاربر
               </ModalHeader>
 
               <ModalBody>
-                <Input
-                  label="نام کاربری"
-                  type="text"
-                  variant="faded"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="@parsaffa"
-                  autoFocus
+                <Textarea
+                  className="max-w-xs"
+                  label="بیو"
+                  variant="bordered"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
                 />
               </ModalBody>
 

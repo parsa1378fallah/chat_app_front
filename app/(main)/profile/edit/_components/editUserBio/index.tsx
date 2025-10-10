@@ -2,7 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/features/userSlice";
-import EditUsername from "./editUsernameModal";
+import EditBioUser from "./editUserBioModal";
 
 const EditUserDisplayName = () => {
   const userStore = useAppSelector(selectUser);
@@ -10,14 +10,12 @@ const EditUserDisplayName = () => {
     <>
       <div className=" flex items-center gap-4">
         <p>
-          نام کاربری :{" "}
-          {userStore?.username ?? (
-            <span className="text-yellow-400">
-              کاربر هنوز نام کاربری ندارد .
-            </span>
+          بیو :{" "}
+          {userStore?.bio ?? (
+            <span className="text-yellow-400">کاربر بیو ندارد .</span>
           )}
         </p>
-        <EditUsername />
+        <EditBioUser />
       </div>
     </>
   );
