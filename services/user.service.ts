@@ -1,6 +1,6 @@
 // services/user.service.ts
 import { userApi } from "@/lib/apiInstances";
-import { UserProfile } from "@/types/user";
+import { UpdateProfileBody, UserProfile } from "@/types/user";
 import {
     ChatResponse
 } from "@/types"
@@ -11,7 +11,7 @@ export async function getProfile(): Promise<UserProfile> {
 }
 
 // ویرایش پروفایل کاربر
-export async function updateProfile(update: Partial<UserProfile>): Promise<UserProfile> {
+export async function editUserProfile(update: UpdateProfileBody): Promise<UserProfile> {
     return await userApi.put<UserProfile>("/me", update);
 }
 
@@ -23,3 +23,4 @@ export async function deleteProfile(): Promise<{ message: string }> {
 export async function getChats(): Promise<ChatResponse[]> {
     return await userApi.get<ChatResponse[]>("/me/chats");
 }
+

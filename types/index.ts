@@ -30,6 +30,7 @@ export interface UserProfile {
   id: string;
   name: string;
   email: string;
+  displayName: string | null;
 }
 export interface Message {
   id: number; // شناسه پیام

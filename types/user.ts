@@ -4,6 +4,7 @@
 export interface LoginResponse {
 
     id: string;
+    displayName: string | null;
     phone: string;
     email: string | null;
     bio: string | null;
@@ -32,4 +33,11 @@ export interface UserProfile {
     phone?: string | null;
     bio?: string | null;
     profileImage?: string | null;
+    displayName: string | null;
+}
+export interface UpdateProfileBody {
+    displayName: string;
+    username?: string | null;
+    phone?: string | null;
+    bio?: string | null;
 }

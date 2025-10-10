@@ -9,6 +9,7 @@ export interface UserState {
     isLoggedIn: boolean;
     bio: string | null;
     profileImage: string | null;
+    displayName: string | null;
 }
 
 export const initialState: UserState = {
@@ -19,6 +20,7 @@ export const initialState: UserState = {
     isLoggedIn: false,
     bio: null,
     profileImage: null,
+    displayName: null
 };
 
 export const userSlice = createSlice({
