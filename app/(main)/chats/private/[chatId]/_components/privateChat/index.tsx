@@ -103,6 +103,16 @@ export default function PrivateChat({ userId, chatId }: Props) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  function getAvatarSrc(profileImage?: string | undefined | null) {
+    if (!profileImage) return "/user.png"; // تصویر پیش‌فرض وقتی وجود ندارد
+
+    // اگر URL کامل باشد، همان را استفاده کن
+    if (profileImage.startsWith("http")) return profileImage;
+
+    // در غیر این صورت، مسیر سرور را به آن اضافه کن
+    return `https://localhost:5000${profileImage}`;
+  }
+
   // ارسال پیام
   const sendMessage = async () => {
     if (socket && input.trim() !== "") {
@@ -161,11 +171,7 @@ export default function PrivateChat({ userId, chatId }: Props) {
             </Button>
             <Avatar
               isBordered
-              src={
-                otherUser?.profileImage
-                  ? `https://localhost:5000${otherUser.profileImage}`
-                  : "/public/user.png"
-              }
+              src={getAvatarSrc(otherUser?.profileImage)}
               size="sm"
               className="cursor-pointer"
               onClick={() => {}}

@@ -19,6 +19,8 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { selectUser } from "@/store/features/userSlice";
 import { updateChat } from "@/store/features/joinedChatsSlice";
 import MessageList from "@/app/(main)/chats/_components/messageList";
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import { ScrollShadow } from "@heroui/react";
 export default function ChannelChat({ userId, channelId }: Props) {
   const dispatch = useAppDispatch();
 
@@ -110,21 +112,43 @@ export default function ChannelChat({ userId, channelId }: Props) {
   };
 
   return (
-    <div className=" px-4 py-8  min-h-svh flex flex-col justify-end  ">
-      <div>
-        <MessageList messages={messages} userId={userId} />
+    <div className=" h-[calc(100vh-65px)] flex flex-col justify-end  ">
+      <div className="">
+        <ScrollShadow hideScrollBar>
+          <div className="px-4">
+            <MessageList messages={messages} userId={userId} />
+
+            <div ref={messagesEndRef} />
+          </div>
+        </ScrollShadow>
 
         <div ref={messagesEndRef} />
       </div>
 
       {isOwner && (
-        <div className="flex justify-center gap-5">
-          <Input
-            placeholder="Enter your message"
-            value={input}
-            onChange={(e: any) => setInput(e.target.value)}
-          />
-          <Button onPress={sendMessage}>Send</Button>
+        <div className=" relative h-14 mt-4">
+          <div className="w-full h-full abolute bottom-0 right-0 flex justify-center">
+            {" "}
+            <Input
+              radius="none"
+              classNames={{
+                inputWrapper: "h-14", // ارتفاع کل باکس
+                input: "h-14 ", // ارتفاع ناحیه متن
+              }}
+              placeholder="پیام خود را وارد کنید"
+              value={input}
+              onChange={(e: any) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  sendMessage();
+                }
+              }}
+            />
+            <Button className="rounded-none h-14" onPress={sendMessage}>
+              <PaperAirplaneIcon className="rotate-180" />
+            </Button>
+          </div>
         </div>
       )}
     </div>
