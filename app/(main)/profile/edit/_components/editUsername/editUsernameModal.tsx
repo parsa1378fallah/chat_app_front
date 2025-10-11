@@ -91,7 +91,6 @@ export default function EditUsernameModal() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="@parsaffa"
-                  autoFocus
                 />
               </ModalBody>
 

@@ -91,7 +91,6 @@ export default function EditUserDisplayNameModal() {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="مثلاً پارسا فلاح"
-                  autoFocus
                 />
               </ModalBody>
 
